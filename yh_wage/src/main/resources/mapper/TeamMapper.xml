@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.x.yh.mapper.TeamMapper">
+
+	<resultMap id="teamVo" type="com.x.yh.context.vo.TeamVo">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="companyid" property="companyid"
+			jdbcType="INTEGER" />
+		<result column="companyname" property="companyName"
+			jdbcType="VARCHAR" />
+	</resultMap>
+
+	<select id="queryTeamVoByCompany" resultMap="teamVo">
+		SELECT t_team.*,
+		t_company.name as companyname From t_team LEFT JOIN t_company
+		on t_team.companyid = t_company.id where t_team.companyid = #{companyid,jdbcType=INTEGER}
+	</select>
+
+	<select id="queryTeamVo" resultMap="teamVo">
+		SELECT t_team.*,
+		t_company.name as companyname From t_team LEFT JOIN t_company
+		on t_team.companyid = t_company.id
+	</select>
+
+</mapper>

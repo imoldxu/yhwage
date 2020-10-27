@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.x.yh.mapper.StaffMapper">
+
+	<resultMap id="staffVo" type="com.x.yh.context.vo.StaffVo">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="companyid" property="companyid"
+			jdbcType="INTEGER" />
+		<result column="companyname" property="companyName"
+			jdbcType="VARCHAR" />
+		<result column="teamid" property="teamid" jdbcType="INTEGER" />
+		<result column="teamname" property="teamName"
+			jdbcType="VARCHAR" />
+		<association property="cop"
+			javaType="com.x.yh.entity.ClassOfPosition">
+			<id column="copid" property="id" jdbcType="INTEGER" />
+			<result column="copname" property="name" jdbcType="VARCHAR" />
+			<result column="basicwage" property="basicwage"
+				jdbcType="INTEGER" />
+			<result column="floatwage" property="floatwage"
+				jdbcType="INTEGER" />
+			<result column="monthratio" property="monthratio"
+				jdbcType="DOUBLE" />
+			<result column="yearratio" property="yearratio"
+				jdbcType="DOUBLE" />
+			<result column="ismanager" property="ismanager"
+				jdbcType="TINYINT" />
+		</association>
+	</resultMap>
+
+	<select id="selectStaffVoById" resultMap="staffVo">
+		SELECT t_staff.*,
+		t_company.name as companyname, t_team.name as teamname,
+		t_class_of_position.id as copid, t_class_of_position.name as copname,
+		t_class_of_position.basicwage, t_class_of_position.floatwage,
+		t_class_of_position.monthratio, t_class_of_position.yearratio,
+		t_class_of_position.ismanager From t_staff LEFT JOIN t_company
+		on t_staff.companyid = t_company.id LEFT JOIN t_team on t_staff.teamid
+		= t_team.id LEFT JOIN t_class_of_position on t_staff.copid =
+		t_class_of_position.id where t_staff.id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<select id="queryStaffVoByCompany" resultMap="staffVo">
+		SELECT t_staff.*,
+		t_company.name as companyname, t_team.name as teamname,
+		t_class_of_position.id as copid, t_class_of_position.name as copname,
+		t_class_of_position.basicwage, t_class_of_position.floatwage,
+		t_class_of_position.monthratio, t_class_of_position.yearratio,
+		t_class_of_position.ismanager From t_staff LEFT JOIN t_company
+		on t_staff.companyid = t_company.id LEFT JOIN t_team on t_staff.teamid
+		= t_team.id LEFT JOIN t_class_of_position on t_staff.copid =
+		t_class_of_position.id where t_staff.companyid =
+		#{companyid,jdbcType=INTEGER}
+	</select>
+
+	<select id="queryStaffVoByTeam" resultMap="staffVo">
+		SELECT t_staff.*,
+		t_company.name as companyname, t_team.name as teamname,
+		t_class_of_position.id as copid, t_class_of_position.name as copname,
+		t_class_of_position.basicwage, t_class_of_position.floatwage,
+		t_class_of_position.monthratio, t_class_of_position.yearratio,
+		t_class_of_position.ismanager From t_staff LEFT JOIN t_company on t_staff.companyid = t_company.id LEFT
+		JOIN t_team on t_staff.teamid = t_team.id LEFT JOIN
+		t_class_of_position on t_staff.copid = t_class_of_position.id where
+		t_staff.teamid = #{teamid,jdbcType=INTEGER}
+	</select>
+
+	<select id="queryManagerStaffVoByCompany" resultMap="staffVo">
+		SELECT t_staff.*,
+		t_company.name as companyname, t_team.name as teamname,
+		t_class_of_position.id as copid, t_class_of_position.name as copname,
+		t_class_of_position.basicwage, t_class_of_position.floatwage,
+		t_class_of_position.monthratio, t_class_of_position.yearratio,
+		t_class_of_position.ismanager From t_staff LEFT JOIN t_company
+		on t_staff.companyid = t_company.id LEFT JOIN t_team on t_staff.teamid
+		= t_team.id LEFT JOIN t_class_of_position on t_staff.copid =
+		t_class_of_position.id where t_staff.companyid =
+		#{companyid,jdbcType=INTEGER} AND t_class_of_position.ismanager=1
+	</select>
+
+</mapper>

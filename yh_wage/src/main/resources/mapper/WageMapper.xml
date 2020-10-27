@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.x.yh.mapper.WageMapper">
+
+	<resultMap id="yearAwardVo" type="com.x.yh.context.vo.YearAwardVo">
+		<result column="staffid" property="staffid" jdbcType="INTEGER" />
+		<result column="staffname" property="staffname" jdbcType="VARCHAR" />
+		<result column="yearaward" property="yearaward"
+			jdbcType="INTEGER" />
+	</resultMap>
+
+	<!--select id="sumMonthCostByCompany" resultType="com.x.yh.entity.Wage">
+		SELECT SUM(basicwage), SUM(floatwage), SUM(award), SUM(yearaward) FROM t_wage WHERE t_wage.companyid= #{companyid, jdbcType=INTEGER} AND t_wage.`month`= #{month,jdbcType=VARCHAR}
+	</select-->
+	
+	<select id="sumYearAward" resultMap="yearAwardVo">
+		SELECT t_wage.staffid, t_wage.staffname, SUM(yearaward) as yearaward FROM t_wage WHERE t_wage.`month` like #{year,jdbcType=VARCHAR} group by t_wage.staffid
+	</select>
+	
+	<select id="sumStaffYearAward" resultMap="yearAwardVo">
+		SELECT t_wage.staffid, t_wage.staffname, SUM(yearaward) as yearaward FROM t_wage WHERE t_wage.staffname = #{staffname,jdbcType=VARCHAR} AND t_wage.`month` like #{year,jdbcType=VARCHAR} group by t_wage.staffid
+	</select>
+
+</mapper>
