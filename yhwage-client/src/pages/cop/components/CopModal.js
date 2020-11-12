@@ -111,18 +111,18 @@ class CopModal extends Component {
                         <Input type="number" placeholder="浮动工资"></Input>
                     </Form.Item>
                     <Form.Item name="monthratio"
-                        label="月提成比例(%)"
+                        label="月提成系数"
                         rules={[{ required: true }]}
                         hasFeedback
                     >
-                        <Input type="number" placeholder="月提成比例"></Input>
+                        <Input type="number" placeholder="月提成系数"></Input>
                     </Form.Item>
                     <Form.Item name="yearratio"
-                        label="年提成比例(%)"
+                        label="年提成系数"
                         rules={[{ required: true }]}
                         hasFeedback
                     >
-                        <Input type="number" placeholder="年提成比例"></Input>
+                        <Input type="number" placeholder="年提成系数"></Input>
                     </Form.Item>
                 </Form>
             </Modal>
@@ -131,7 +131,7 @@ class CopModal extends Component {
 
 }
 
-CopModal.PropTypes = {
+CopModal.propTypes = {
     handleOk: PropTypes.func,
     handleCancel: PropTypes.func,
     cop: PropTypes.object,

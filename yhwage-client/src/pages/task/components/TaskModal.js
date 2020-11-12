@@ -21,9 +21,9 @@ const layout ={
 class TaskModal extends Component {
     constructor(props){
         super(props)
-        const {task, teamofcompany} = props
-        if(task.companyid){
-            this.state = { teams: teamofcompany[task.companyid]}
+        const {task, teamofdepartment} = props
+        if(task.departmentid){
+            this.state = { teams: teamofdepartment[task.departmentid]}
         }else{
             this.state = { teams: []}
         }
@@ -150,7 +150,7 @@ class TaskModal extends Component {
 
 }
 
-TaskModal.PropTypes = {
+TaskModal.propTypes = {
     handleOk: PropTypes.func,
     handleCancel: PropTypes.func,
     task: PropTypes.object,

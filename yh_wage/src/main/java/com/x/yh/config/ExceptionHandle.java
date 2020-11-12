@@ -2,6 +2,7 @@ package com.x.yh.config;
 
 import javax.validation.ConstraintViolationException;
 
+import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.slf4j.Logger;
@@ -49,10 +50,15 @@ public class ExceptionHandle {
 				return new ResponseEntity<>(errorbody, HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		} else if (e instanceof UnauthenticatedException) {
-			Response errorbody = Response.Error(ErrorCode.UNLOGIN, "你还没有登陆");
+			Response errorbody = Response.Error(ErrorCode.UNLOGIN, "登陆已过期或你还没有登陆");
 			return new ResponseEntity<>(errorbody, HttpStatus.INTERNAL_SERVER_ERROR);
 		} else if( e instanceof UnauthorizedException) {
 			Response errorbody = Response.Error(ErrorCode.UNAUTH, "你没有此操作的权限");
+			return new ResponseEntity<>(errorbody, HttpStatus.INTERNAL_SERVER_ERROR);
+		} else if( e instanceof AuthenticationException) {
+			AuthenticationException methodE = (AuthenticationException) e;
+			Throwable throwalbe = e.getCause();
+			Response errorbody = Response.Error(ErrorCode.LOGIN_ERROR, throwalbe.getMessage());			
 			return new ResponseEntity<>(errorbody, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		

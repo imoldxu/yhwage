@@ -9,18 +9,25 @@
 			jdbcType="INTEGER" />
 		<result column="companyname" property="companyName"
 			jdbcType="VARCHAR" />
+		<result column="departmentid" property="departmentid"
+			jdbcType="INTEGER" />
+		<result column="departmentname" property="departmentName"
+			jdbcType="VARCHAR" />
 	</resultMap>
 
-	<select id="queryTeamVoByCompany" resultMap="teamVo">
-		SELECT t_team.*,
-		t_company.name as companyname From t_team LEFT JOIN t_company
-		on t_team.companyid = t_company.id where t_team.companyid = #{companyid,jdbcType=INTEGER}
-	</select>
-
 	<select id="queryTeamVo" resultMap="teamVo">
-		SELECT t_team.*,
-		t_company.name as companyname From t_team LEFT JOIN t_company
-		on t_team.companyid = t_company.id
+		SELECT t_team.*, t_department.name as departmentname, t_company.id as companyid,
+		t_company.name as companyname From t_team LEFT JOIN t_department ON t_department.id = t_team.departmentid
+		LEFT JOIN t_company
+		on t_department.companyid = t_company.id
+		<where>
+		   <if test="departmentid != null">
+		        t_department.id = #{departmentid}
+		   </if>
+		   <if test="companyid != null">
+		       AND t_company.id = #{companyid}
+		   </if>
+		 </where>
 	</select>
 
 </mapper>

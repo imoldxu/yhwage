@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.x.yh.context.bo.AddTaskBo;
+import com.x.yh.context.bo.AssignCompanyTaskBo;
 import com.x.yh.context.bo.ModifyTaskBo;
 import com.x.yh.context.bo.TaskQuery;
 import com.x.yh.context.vo.TaskVo;
@@ -64,6 +65,29 @@ public class TaskController{
 	
 		List<TaskVo> ret = taskService.query(taskQuery);
 		return ret;
+	}
+	
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(path="/company", method = RequestMethod.GET)
+	@ApiOperation(value = "分配任务清单", notes = "获取任务清单")
+	public List<TaskVo> queryTaskByCompany(
+			@ApiParam(name = "taskQuery", value = "任务查询条件") @Valid TaskQuery taskQuery,
+			HttpServletRequest request, HttpServletResponse response) {
+	
+		List<TaskVo> ret = taskService.query(taskQuery);
+		return ret;
+	}
+	
+	@RequiresRoles({"manager"})
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(path="/company", method = RequestMethod.POST)
+	@ApiOperation(value = "分配任务清单", notes = "获取任务清单")
+	public void assignTasks(
+			@ApiParam(name = "assignCompanyTaskBo", value = "部门任务") @Valid @RequestBody AssignCompanyTaskBo assignCompanyTaskBo,
+			HttpServletRequest request, HttpServletResponse response) {
+	
+		taskService.assign(assignCompanyTaskBo);
+		return;
 	}
 	
 }

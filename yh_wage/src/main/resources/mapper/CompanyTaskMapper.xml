@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.x.yh.mapper.CompanyTaskMapper">
+
+	<resultMap id="companyTaskVo" type="com.x.yh.context.vo.CompanyTaskVo">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="month" property="month" jdbcType="VARCHAR" />
+		<result column="profit" property="profit" jdbcType="INTEGER" />
+		<result column="tourists" property="tourists"
+			jdbcType="INTEGER" />
+		<result column="companyid" property="companyid"
+			jdbcType="INTEGER" />
+		<result column="companyname" property="companyName"
+			jdbcType="VARCHAR" />
+	</resultMap>
+
+	<select id="selectCompanyTaskVo" resultMap="companyTaskVo">
+		select t_company_task.*, t_company.`name` as companyname from t_company_task
+		LEFT JOIN t_company ON t_company_task.companyid = t_company.id 
+		WHERE t_task.teamid= #{teamid,jdbcType=INTEGER} AND t_task.`month`=
+		#{month,jdbcType=VARCHAR}
+	</select>
+
+	<select id="queryCompanyTaskVo" resultMap="companyTaskVo">
+		select t_company_task.*, t_company.`name` as companyname from t_company_task
+		LEFT JOIN t_company ON t_company_task.companyid = t_company.id 
+		<where>
+		<if test="companyid != null">
+			t_company_task.companyid= #{companyid}
+		</if> 
+		<if test="month !=null">
+			AND t_company_task.month = #{month}
+		</if>
+		</where>
+		ORDER BY t_company_task.`month` desc limit 12
+	</select>
+
+</mapper>

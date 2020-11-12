@@ -22,6 +22,30 @@ public class Company {
 	@Column(name = "name")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
 	private String name;
+	
+	@Column(name = "scoreweight")
+	@ColumnType(jdbcType = JdbcType.INTEGER)
+	private Integer scoreweight;
+
+	@Column(name = "profitweight")
+	@ColumnType(jdbcType = JdbcType.INTEGER)
+	private Integer profitweight;
+
+	@Column(name = "touristsweight")
+	@ColumnType(jdbcType = JdbcType.INTEGER)
+	private Integer touristsweight;
+	
+	@Column(name = "yearratio")
+	@ColumnType(jdbcType = JdbcType.DOUBLE)
+	private Double yearratio;
+	
+	@Column(name = "monthratio")
+	@ColumnType(jdbcType = JdbcType.DOUBLE)
+	private Double monthratio;
+	
+	@Column(name = "headerfee")
+	@ColumnType(jdbcType = JdbcType.INTEGER)
+	private Integer headerfee;//人头费
 
 	public Integer getId() {
 		return id;
@@ -37,6 +61,54 @@ public class Company {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Integer getScoreweight() {
+		return scoreweight;
+	}
+
+	public void setScoreweight(Integer scoreweight) {
+		this.scoreweight = scoreweight;
+	}
+
+	public Integer getProfitweight() {
+		return profitweight;
+	}
+
+	public void setProfitweight(Integer profitweight) {
+		this.profitweight = profitweight;
+	}
+
+	public Integer getTouristsweight() {
+		return touristsweight;
+	}
+
+	public void setTouristsweight(Integer touristsweight) {
+		this.touristsweight = touristsweight;
+	}
+
+	public Double getYearratio() {
+		return yearratio;
+	}
+
+	public void setYearratio(Double yearratio) {
+		this.yearratio = yearratio;
+	}
+
+	public Double getMonthratio() {
+		return monthratio;
+	}
+
+	public void setMonthratio(Double monthratio) {
+		this.monthratio = monthratio;
+	}
+
+	public Integer getHeaderfee() {
+		return headerfee;
+	}
+
+	public void setHeaderfee(Integer headerfee) {
+		this.headerfee = headerfee;
 	}
 	
 }

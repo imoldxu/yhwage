@@ -10,11 +10,8 @@ import com.x.yh.entity.Task;
 
 public interface TaskMapper extends BaseMapper<Task>{
 
-	TaskVo selectTeamMonthTaskVo(@Param(value = "teamid")Integer teamid, @Param(value = "month")String month);
+	TaskVo selectTeamTaskVo(@Param(value = "teamid")Integer teamid, @Param(value = "month")String month);
 
-	TaskVo selectCompanyMonthTaskVo(@Param(value = "companyid")Integer companyid, @Param(value = "month")String month);
+	List<TaskVo> queryTeamTaskVo(@Param(value = "companyid")Integer companyid,@Param(value = "departmentid")Integer departmentid, @Param(value = "teamid")Integer teamid, @Param(value = "month")String month, @Param(value = "limit")Integer limit);
 
-	List<TaskVo> queryTaskVoByTeam(@Param(value = "teamid")Integer teamid);
-
-	List<TaskVo> queryTaskVoByCompany(@Param(value = "companyid")Integer companyid);
 }

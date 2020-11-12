@@ -20,14 +20,17 @@ const layout ={
 class StaffModal extends Component{
     constructor(props){
         super(props)
-        const {staff, teamofcompany} = props
+        const {staff, departofcompany, teamofdepartment} = props
         if(staff.companyid){
-            this.state = { teams: teamofcompany[staff.companyid], ismanager: staff.cop.ismanager}
+            if(staff.departmentid){
+                this.state = { departments: departofcompany[staff.companyid], teams: teamofdepartment[staff.departmentid] }
+            }else{
+                this.state = { departments: departofcompany[staff.companyid], teams: [] }
+            }
         }else{
-            this.state = { teams: [], ismanager:1}
+            this.state = {departments:[], teams:[]}
         }
     }
-
 
     formRef = React.createRef()
 
@@ -51,26 +54,30 @@ class StaffModal extends Component{
     }
   
     handleCompanyChange = (companyid) =>{
-        const { teamofcompany } = this.props
-        const teams = teamofcompany[companyid]
-        this.setState({teams: teams})
-    }
-
-    handleManagerChange = (value) => {
-        this.setState({ismanager: value})
-        this.formRef.current.setFields([{name:'copid',value:null}])
+        const { departofcompany } = this.props
+        const departments = departofcompany[companyid]
+        this.setState({ departments: departments, teams: []})
+        this.formRef.current.setFieldsValue({departmentid:null, teamid:null})
+      }
+    
+      handleDepartmentChange = (departmentid) =>{
+        const { teamofdepartment } = this.props
+        const teams = teamofdepartment[departmentid]
+        this.setState({ teams: teams})
+        this.formRef.current.setFieldsValue({teamid:null})
     }
 
     render(){
 
-        const { staff, companys, cops=[], teamofcompany, visible, handleCancel} = this.props;
+        const { staff, companys, cops=[], visible, handleCancel} = this.props;
         const { id, cop } = staff;
         
+        const departments = this.state.departments
         const teams = this.state.teams
-        let ismanager = this.state.ismanager;
+
         let copid = null
-        if(staff.cop){
-            copid = staff.cop.id
+        if(cop){
+            copid = cop.id
         }
 
         const title = id ? "修改员工":"新建员工"
@@ -88,7 +95,7 @@ class StaffModal extends Component{
                     {...layout}
                     ref={this.formRef}
                     name="newStaff"
-                    initialValues={{...staff, copid:copid, ismanager: ismanager}}
+                    initialValues={{...staff, copid }}
                     preserve={false}
                 >
                     {id ?
@@ -117,57 +124,41 @@ class StaffModal extends Component{
                             })}
                         </Select>
                     </Form.Item>
-                    <Form.Item name="ismanager"
-                    label="管理层"
+                    <Form.Item name="departmentid"
+                    label="所属部门"
                     rules={[{required:true}]}
                     hasFeedback
                     >
-                        <Select onChange={this.handleManagerChange}>
-                            <Option value={1}>是</Option>
-                            <Option value={0}>否</Option>
+                        <Select onChange={this.handleDepartmentChange}>
+                            {departments.map(department=>{
+                                return (
+                                <Option value={department.id}>{department.name}</Option>
+                                )
+                            })}
                         </Select>
                     </Form.Item>
-                    {ismanager===1?(
-                        <Form.Item name="copid"
-                        label="职级"
-                        rules={[{required:true}]}
-                        hasFeedback
-                        >
-                            <Select>
-                                {cops.map(cop=>{
-                                    return cop.ismanager===1?
-                                     (<Option value={cop.id}>{cop.name}</Option>) : ('')
-                                })}
-                            </Select>
-                        </Form.Item>
-                    ): (
-                        <>
-                        <Form.Item name="teamid" label="所属团队"
-                        rules={[{required:true}]} 
-                        hasFeedback>
-                            <Select>
-                                {teams.map(team=>{
-                                    return (
-                                    <Option value={team.id}>{team.name}</Option>
-                                    )
-                                })}
-                            </Select>
-                        </Form.Item>
-                        <Form.Item name="copid"
-                        label="职级"
-                        rules={[{required:true}]}
-                        hasFeedback
-                        >
-                            <Select>
-                                {cops.map(cop=>{
-                                    return cop.ismanager===1?
-                                    ('') : (<Option value={cop.id}>{cop.name}</Option>)
-                                })}
-                            </Select>
-                        </Form.Item>
-                        </>
-                    )
-                    }
+                    <Form.Item name="teamid" label="所属团队"
+                    rules={[{required:true}]} 
+                    hasFeedback>
+                        <Select>
+                            {teams.map(team=>{
+                                return (
+                                <Option value={team.id}>{team.name}</Option>
+                                )
+                            })}
+                        </Select>
+                    </Form.Item>
+                    <Form.Item name="copid"
+                    label="职级"
+                    rules={[{required:true}]}
+                    hasFeedback
+                    >
+                        <Select>
+                            {cops.map(cop=>{
+                                return (<Option value={cop.id}>{cop.name}</Option>)
+                            })}
+                        </Select>
+                    </Form.Item>
                 </Form>
             </Modal>
         )
@@ -175,7 +166,7 @@ class StaffModal extends Component{
 
 }
 
-StaffModal.PropTypes={
+StaffModal.propTypes={
     handleOk: PropTypes.func,
     handleCancel: PropTypes.func,
     staff: PropTypes.object,

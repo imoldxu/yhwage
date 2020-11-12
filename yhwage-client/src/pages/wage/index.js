@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { history, connect } from 'umi'
 import { Row, Col, Button, Popconfirm, Form, Input, Space } from 'antd'
@@ -10,8 +10,8 @@ import Filter from './components/Filter'
 import WageModal from './components/WageModal'
 
 @withI18n()
-@connect(({ wage, company, team, loading }) => ({ wage, company, team, loading }))
-class Wage extends PureComponent {
+@connect(({ wage, company, department, team, loading }) => ({ wage, company, department, team, loading }))
+class Wage extends Component {
   //修改页面把过滤条件与页码等参数记录在路径上重新刷新
   // handleRefresh = newQuery => {
   //   const { location } = this.props
@@ -67,22 +67,27 @@ class Wage extends PureComponent {
   }
 
   get filterProps() {
-    const { wage, i18n, company, team, dispatch } = this.props
+    const { wage, i18n, company, department, team, dispatch } = this.props
     const { filter } = wage
     const { list=[] } = company
-    const { teamofcompany } = team
+    const { departofcompany } = department
+    const { teamofdepartment } = team
 
     return {
       i18n,
       filter: filter,
       companys: list,
-      teamofcompany: teamofcompany,
+      departofcompany,
+      teamofdepartment,
       onFilterChange: values => {
         dispatch({type:'wage/querySuccess', payload:{filter: values}})
         dispatch({type:'wage/query', payload: values})
        },
        onCalc: () => {
         this.openModal()
+      },
+      onDelete: () => {
+        dispatch({type:'wage/showDeleteModal', payload: {}})
       }
     }
   }
@@ -102,6 +107,28 @@ class Wage extends PureComponent {
       },
       handleCancel: this.closeModal,
       companys: list,
+      title: "计算月薪",
+    }
+  }
+
+  get deleteModalProps(){
+    const { wage, company, dispatch } = this.props 
+    const { deleteModalVisible } = wage
+    const { list=[] } = company
+
+    return {
+      visible: deleteModalVisible,
+      handleOk: values=>{
+        dispatch({
+          type: 'wage/delete',
+          payload: values,
+        })
+      },
+      handleCancel: ()=>{
+        dispatch({type: 'wage/closeDeleteModal'})
+      },
+      companys: list,
+      title: "删除月薪"
     }
   }
 
@@ -135,12 +162,13 @@ class Wage extends PureComponent {
         <Filter {...this.filterProps}></Filter>
         <List {...this.listProps} />
         <WageModal {...this.modalProps}></WageModal>
+        <WageModal {...this.deleteModalProps}></WageModal>
       </Page>
     )
   }
 }
 
-Wage.PropTypes = {
+Wage.propTypes = {
   wage: PropTypes.object,
   location: PropTypes.object,
   dispatch: PropTypes.func,

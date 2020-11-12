@@ -1,11 +1,15 @@
 package com.x.yh.context.bo;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 public class AddTeamBo {
 	
+	@NotBlank
 	private String name;
 	
-	private Integer companyid;
+	@NotNull
+	private Integer departmentid;
 
 	public String getName() {
 		return name;
@@ -15,12 +19,12 @@ public class AddTeamBo {
 		this.name = name;
 	}
 
-	public Integer getCompanyid() {
-		return companyid;
+	public Integer getDepartmentid() {
+		return departmentid;
 	}
 
-	public void setCompanyid(Integer companyid) {
-		this.companyid = companyid;
+	public void setDepartmentid(Integer departmentid) {
+		this.departmentid = departmentid;
 	}
 	
 }

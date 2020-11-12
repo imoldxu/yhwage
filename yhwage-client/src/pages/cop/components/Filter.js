@@ -84,7 +84,7 @@ class Filter extends Component {
 
 }
 
-Filter.PropTypes = {
+Filter.propTypes = {
   filter: PropTypes.object,
   onFilterChange: PropTypes.func,
 }

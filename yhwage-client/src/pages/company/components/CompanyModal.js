@@ -1,56 +1,55 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import moment from 'moment'
 
-import { Trans } from '@lingui/react'
-import { Button, Row, Col, Form, Input, Cascader, Modal } from 'antd'
+import { Form, Input, Modal } from 'antd'
+import { checkTwoPointNum, regFenToYuan, regYuanToFen } from '../../../utils/money'
 
-const layout ={
+const layout = {
     labelCol: {
-        span: 4,
-      },
-      wrapperCol: {
-        span: 20,
+        span: 8,
+    },
+    wrapperCol: {
+        span: 16,
     },
 }
 
-class CompanyModal extends Component{
+class CompanyModal extends Component {
     formRef = React.createRef()
 
-    onOk = () =>{
+    onOk = () => {
 
-        const {handleOk} = this.props;
+        const { handleOk } = this.props;
 
         this.formRef.current
-        .validateFields()
-        .then(values => {
+            .validateFields()
+            .then(values => {
 
-            // let fileObj = document.getElementById('uploadPrice_file').files[0]
-            
-            // let newValues ={
-            //     providerId: values.providerId,
-            //     file: fileObj,
-            // }
+                values.headerfee = regYuanToFen(values.headerfee, 100)
 
-            if(handleOk){
-                handleOk(values)
-            }
-        })
-        .catch(info => {
-            console.log('校验失败:', info);
-        });
+                if (handleOk) {
+                    handleOk(values)
+                }
+            })
+            .catch(info => {
+                console.log('校验失败:', info);
+            });
 
-        
+
     }
 
-    render(){
+    render() {
 
-        const { company, visible, handleCancel} = this.props;
-        const { id, name } = company;
+        const { company, visible, handleCancel } = this.props;
+        const { id } = company;
+        let { headerfee } = company;
 
-        const title = id ? "修改公司":"新建公司"
+        if(headerfee){
+            headerfee = regFenToYuan(headerfee)
+        }
 
-        return(
+        const title = id ? "修改公司" : "新建公司"
+
+        return (
             <Modal
                 title={title}
                 visible={visible}
@@ -63,20 +62,63 @@ class CompanyModal extends Component{
                     {...layout}
                     ref={this.formRef}
                     name="newCompany"
-                    initialValues={{id, name}}
+                    initialValues={{ ...company, headerfee }}
                     preserve={false}
                 >
                     {id ?
                         (<Form.Item name="id" noStyle>
                             <Input type='hidden'></Input>
-                        </Form.Item>):('')
+                        </Form.Item>) : ('')
                     }
                     <Form.Item name="name"
-                    label="公司名称"
-                    rules={[{required:true}]}
-                    hasFeedback
+                        label="公司名称"
+                        rules={[{ required: true }]}
+                        hasFeedback
                     >
                         <Input placeholder="公司名称"></Input>
+                    </Form.Item>
+                    <Form.Item label="评分权重(%)" name='scoreweight'
+                        rules={[{ required: true }]}
+                        hasFeedback>
+                        <Input
+                            placeholder="请输入"
+                        />
+                    </Form.Item>
+                    <Form.Item label="利润权重(%)" name='profitweight'
+                        rules={[{ required: true }]}
+                        hasFeedback>
+                        <Input
+                            placeholder="请输入"
+                        />
+                    </Form.Item>
+                    <Form.Item label="流量权重(%)" name='touristsweight'
+                        rules={[{ required: true }]}
+                        hasFeedback>
+                        <Input
+                            placeholder="请输入"
+                        />
+                    </Form.Item>
+                    <Form.Item label="月毛利提成比例(%)" name='monthratio'
+                        rules={[{ required: true }]}
+                        hasFeedback>
+                        <Input
+                            placeholder="请输入"
+                        />
+                    </Form.Item>
+                    <Form.Item label="年纯利提成比(%)" name='yearratio'
+                        rules={[{ required: true }]}
+                        hasFeedback>
+                        <Input
+                            placeholder="请输入"
+                        />
+                    </Form.Item>
+                    <Form.Item label="人头费(元)" name='headerfee'
+                        rules={[{ required: true, validator: (_, value) =>
+                            checkTwoPointNum(value)?
+                                Promise.resolve() :  Promise.reject('请输入正确的金额')
+                        }]}
+                        hasFeedback>
+                        <Input type="number" placeholder="请输入人头费"/>
                     </Form.Item>
                 </Form>
             </Modal>
@@ -85,7 +127,7 @@ class CompanyModal extends Component{
 
 }
 
-CompanyModal.PropTypes={
+CompanyModal.propTypes = {
     handleOk: PropTypes.func,
     handleCancel: PropTypes.func,
     company: PropTypes.object,

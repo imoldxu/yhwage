@@ -48,8 +48,8 @@ class ConfirmModal extends Component {
 
         const title = companyName+"-"+teamName+"-"+month+"绩效"
         const profitYuan = regFenToYuan(profit)
-        const actualProfitYuan = regFenToYuan(actualprofit)
-        const othercostYuan = regFenToYuan(othercost)
+        const actualProfitYuan = actualprofit ? regFenToYuan(actualprofit) : null
+        const othercostYuan = othercost ? regFenToYuan(othercost) : null
 
         return (
             <Modal
@@ -108,7 +108,7 @@ class ConfirmModal extends Component {
 
 }
 
-ConfirmModal.PropTypes = {
+ConfirmModal.propTypes = {
     handleOk: PropTypes.func,
     handleCancel: PropTypes.func,
     task: PropTypes.object,

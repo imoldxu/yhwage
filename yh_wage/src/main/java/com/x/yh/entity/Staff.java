@@ -23,10 +23,6 @@ public class Staff {
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
 	private String name;
 	
-	@Column(name = "companyid")
-	@ColumnType(jdbcType = JdbcType.TINYINT)
-	private Integer companyid;
-	
 	@Column(name = "teamid")
 	@ColumnType(jdbcType = JdbcType.TINYINT)
 	private Integer teamid;
@@ -49,14 +45,6 @@ public class Staff {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public Integer getCompanyid() {
-		return companyid;
-	}
-
-	public void setCompanyid(Integer companyid) {
-		this.companyid = companyid;
 	}
 
 	public Integer getTeamid() {

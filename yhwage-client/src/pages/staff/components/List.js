@@ -39,13 +39,7 @@ class List extends PureComponent {
                 title: '员工名称',
                 dataIndex: 'name',
                 key: 'name',
-                width: '20%',
-            },
-            {
-                title: '所属公司',
-                dataIndex: 'companyName',
-                key: 'companyName',
-                width: '20%',
+                width: '15%',
             },
             {
                 title: '职级',
@@ -57,15 +51,27 @@ class List extends PureComponent {
                 }
             },
             {
-                title: '所属团队',
+                title: '公司',
+                dataIndex: 'companyName',
+                key: 'companyName',
+                width: '15%',
+            },
+            {
+                title: '部门',
+                dataIndex: 'departmentName',
+                key: 'departmentName',
+                width: '15%',
+            },
+            {
+                title: '团队',
                 dataIndex: 'teamName',
                 key: 'teamName',
-                width: '20%',
+                width: '15%',
             },
             {
                 title: '操作',
                 key: 'op',
-                width: '20%',
+                width: '15%',
                 fixed: 'right',
                 render: (text, record) => {
                     return (

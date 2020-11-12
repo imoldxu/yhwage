@@ -10,7 +10,7 @@ import com.x.yh.entity.Team;
 
 public interface TeamMapper extends BaseMapper<Team>{
 
-	List<TeamVo> queryTeamVoByCompany(@Param(value = "companyid")Integer companyid);
+	//List<TeamVo> queryTeamVoByCompany(@Param(value = "companyid")Integer companyid);
 	
-	List<TeamVo> queryTeamVo();
+	List<TeamVo> queryTeamVo(@Param(value = "companyid")Integer companyid, @Param(value = "departmentid")Integer departmentid);
 }

@@ -3,12 +3,13 @@ import api from 'api'
 import { history } from 'umi'
 const { pathToRegexp } = require("path-to-regexp")
 
-const { queryWage, calcWage } = api
+const { queryWage, calcWage, deleteWage } = api
 
 export default {
     namespace: "wage",
     state: {
         modalVisible: false,
+        deleteModalVisible: false,
         list: []
     },
     subscriptions: {
@@ -44,6 +45,18 @@ export default {
                 ...state,
                 modalVisible: false,
             }
+        },
+        showDeleteModal(state, {payload}) {
+            return {
+                ...state,
+                deleteModalVisible: true,
+            }
+        },
+        closeDeleteModal(state, {payload}){
+            return {
+                ...state,
+                deleteModalVisible: false,
+            }
         }
     },
 
@@ -53,6 +66,15 @@ export default {
             if (success) {
                 yield put({type: 'closeModal'})
                 message.success("月薪生成成功",5, ()=>{})
+            } else {
+                throw data
+            }
+        },
+        *delete({payload}, { call, put }) {
+            const { success, data } = yield call(deleteWage, payload)
+            if (success) {
+                yield put({type: 'closeDeleteModal'})
+                message.success("月薪删除成功",5, ()=>{})
             } else {
                 throw data
             }

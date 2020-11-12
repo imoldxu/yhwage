@@ -9,11 +9,15 @@ const { Option } = Select;
 class Filter extends Component {
   constructor(props){
     super(props)
-    const { filter={}, teamofcompany } = props
+    const { filter={}, departofcompany, teamofdepartment } = props
     if(filter.companyid){
-      this.state = { teams: teamofcompany[filter.companyid] }
+      if(filter.departmentid){
+        this.state = { departments: departofcompany[filter.companyid], teams: teamofdepartment[filter.departmentid] }
+      }else{
+        this.state = { departments: departofcompany[filter.companyid], teams: [] }
+      }
     }else{
-      this.state = {teams:[]}
+      this.state = {departments:[], teams:[]}
     }
   }
 
@@ -59,27 +63,47 @@ class Filter extends Component {
   }
 
   handleCompanyChange = (companyid) =>{
-    const { teamofcompany } = this.props
-    const teams = teamofcompany[companyid]
-    this.setState({teams: teams})
+    const { departofcompany } = this.props
+    const departments = departofcompany[companyid]
+    this.formRef.current.setFieldsValue({departmentid: null})
+    this.formRef.current.setFieldsValue({teamid: null})
+    this.setState({ departments: departments, teams: []})
+  }
+
+  handleDepartmentChange = (departmentid) =>{
+    const { teamofdepartment } = this.props
+    if(departmentid){
+      const teams = teamofdepartment[departmentid]
+      this.setState({ teams: teams})
+    }else{
+      this.setState({ teams: []})
+    }
+    this.formRef.current.setFieldsValue({teamid: null})
   }
 
   render() {
-    const { filter, companys, onAdd } = this.props
+    const { filter={}, companys, onAdd } = this.props
     
     const teams = this.state.teams
+    const departments = this.state.departments
+
+    const { month } = filter
+    let monthDate
+    if(month){
+      monthDate = moment(month)
+    }
 
     return (
       <Form
         ref={this.formRef}
         name="taskQuery"
         layout="horizontal"
-        initialValues={{...filter}}
+        initialValues={{...filter, month: monthDate}}
         onFinish={this.handleSubmit}
         onReset={this.handleReset}
       >
         <Row gutter={16}>
-          <Col span= "6">
+          <Col span= "4">
             <Form.Item name="companyid" label="公司">
               <Select
                 onChange={this.handleCompanyChange}
@@ -94,7 +118,22 @@ class Filter extends Component {
               </Select>
             </Form.Item>
           </Col>
-          <Col span= "6">
+          <Col span= "4">
+            <Form.Item name="departmentid" label="部门">
+              <Select
+                onChange={this.handleDepartmentChange}
+                >
+                {
+                   departments.map(department=>{
+                      return(
+                        <Option value={department.id}>{department.name}</Option>
+                      )
+                   }) 
+                }
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col span= "4">
             <Form.Item name="teamid" label="团队">
               <Select>
                 <Option></Option>
@@ -106,13 +145,13 @@ class Filter extends Component {
               </Select>
             </Form.Item>
           </Col>
-          <Col span="6">
+          <Col span="4">
             <Form.Item name="month" label="日期">
               <DatePicker picker="month">
               </DatePicker>
             </Form.Item>
           </Col>
-          <Col span="6" >
+          <Col span="8" >
             <Row justify="space-around">
               <Col flex={3}>
               <Button
@@ -127,10 +166,10 @@ class Filter extends Component {
               </Button>
               </Col>
               <Col flex={1}>
-              <Button
+              {/* <Button
                 htmlType="button" onClick={ ()=>onAdd() } >
                 <Trans>Create</Trans>
-              </Button>
+              </Button> */}
               </Col>
             </Row>
           </Col>
@@ -141,7 +180,7 @@ class Filter extends Component {
 
 }
 
-Filter.PropTypes = {
+Filter.propTypes = {
   filter: PropTypes.object,
   onFilterChange: PropTypes.func,
 }

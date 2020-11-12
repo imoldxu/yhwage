@@ -18,50 +18,53 @@
 			jdbcType="INTEGER" />
 		<result column="companyname" property="companyName"
 			jdbcType="VARCHAR" />
+		<result column="departmentid" property="departmentid"
+			jdbcType="INTEGER" />
+		<result column="departmentname" property="departmentName"
+			jdbcType="VARCHAR" />
 		<result column="teamid" property="teamid" jdbcType="INTEGER" />
 		<result column="teamname" property="teamName"
 			jdbcType="VARCHAR" />
 		<result column="othercost" property="othercost" jdbcType="INTEGER" />
 	</resultMap>
 
-	<select id="selectTeamMonthTaskVo" resultMap="taskVo">
-		select t_task.*, t_company.id as companyid,
-		t_team.`name` teamname, t_company.`name` as companyname from t_task
-		LEFT JOIN t_team ON t_task.teamid = t_team.id LEFT JOIN t_company ON
-		t_team.companyid = t_company.id WHERE t_task.teamid=
-		#{teamid,jdbcType=INTEGER} AND t_task.`month`=
-		#{month,jdbcType=VARCHAR}
+	<select id="selectTeamTaskVo" resultMap="taskVo">
+		select t_task.*, t_company.id as companyid, t_company.`name` as companyname,
+		t_department.id as departmentid, t_department.name as departmentname,
+		t_team.`name` as teamname from t_task
+		LEFT JOIN t_team ON t_task.teamid = t_team.id 
+		LEFT JOIN t_department ON t_department.id = t_team.departmentid 
+		LEFT JOIN t_company ON t_department.companyid = t_company.id
+		WHERE t_task.teamid= #{teamid,jdbcType=INTEGER}
+		AND t_task.`month`= #{month,jdbcType=VARCHAR}
 	</select>
 
-	<select id="selectCompanyMonthTaskVo" resultMap="taskVo">
-		select t_task.`month`, t_company.id as companyid,
-		sum(t_task.profit) as profit, sum(t_task.tourists) as tourists,
-		sum(t_task.actualprofit) as actualprofit, sum(t_task.actualtourists)
-		as actualtourists, avg(t_task.actualscore) as actualscore, sum(t_task.othercost) as othercost,
-		t_company.`name` as companyname from t_task LEFT JOIN t_team ON
-		t_task.teamid = t_team.id LEFT JOIN t_company ON t_team.companyid =
-		t_company.id where t_company.id = #{companyid,jdbcType=INTEGER} AND
-		t_task.`month`= #{month,jdbcType=VARCHAR} GROUP BY t_company.id
-	</select>
-
-	<select id="queryTaskVoByCompany" resultMap="taskVo">
-		select t_company.id as companyid,
-		sum(t_task.profit) as profit, sum(t_task.tourists) as tourists,
-		sum(t_task.actualprofit) as actualprofit, sum(t_task.actualtourists)
-		as actualtourists, avg(t_task.actualscore) as actualscore, sum(t_task.othercost) as othercost,
-		t_task.`month`, t_company.`name` as companyname from t_task LEFT JOIN
-		t_team ON t_task.teamid = t_team.id LEFT JOIN t_company ON
-		t_team.companyid = t_company.id where t_company.id =
-		#{companyid,jdbcType=INTEGER} GROUP BY `month` ORDER BY t_task.`month`
-		desc limit 12
-	</select>
-
-	<select id="queryTaskVoByTeam" resultMap="taskVo">
-		select t_task.*, t_company.id as companyid,
-		t_team.`name` teamname, t_company.`name` as companyname from t_task
-		LEFT JOIN t_team ON t_task.teamid = t_team.id LEFT JOIN t_company ON
-		t_team.companyid = t_company.id WHERE t_task.teamid=
-		#{teamid,jdbcType=INTEGER} ORDER BY t_task.`month` desc limit 12
+	<select id="queryTeamTaskVo" resultMap="taskVo">
+		select t_task.*, t_company.id as companyid, t_company.`name` as companyname,
+		t_department.id as departmentid, t_department.name as departmentname,
+		t_team.`name` as teamname from t_task
+		LEFT JOIN t_team ON t_task.teamid = t_team.id 
+		LEFT JOIN t_department ON t_department.id = t_team.departmentid 
+		LEFT JOIN t_company ON t_department.companyid = t_company.id
+		<where>
+			<choose>
+			    <when test="teamid != null">
+			      t_task.teamid = #{teamid}
+			    </when>
+			    <when test="departmentid != null">
+			      t_department.id = #{departmentid}
+			    </when>
+			    <when test="companyid != null">
+			      t_company.id = #{companyid}
+			    </when>
+			    <otherwise>
+			    </otherwise>
+			</choose>
+			<if test="month != null">
+				AND t_task.month = #{month}
+			</if>
+		</where>
+		ORDER BY t_task.`month` desc limit ${limit}
 	</select>
 
 </mapper>

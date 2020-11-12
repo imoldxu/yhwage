@@ -13,10 +13,10 @@ public interface StaffMapper extends BaseMapper<Staff>{
 
 	StaffVo selectStaffVoById(@Param(value = "id")Integer id);
 
-	List<StaffVo> queryStaffVoByCompany(@Param(value = "companyid")Integer companyid);
+	List<StaffVo> queryStaffVo(@Param(value = "companyid")Integer companyid, @Param(value = "departmentid")Integer departmentid,@Param(value = "teamid")Integer teamid);
 	
-	List<StaffVo> queryStaffVoByTeam(@Param(value = "teamid")Integer teamid);
+	//List<StaffVo> queryStaffVoByTeam(@Param(value = "teamid")Integer teamid);
 
-	List<StaffVo> queryManagerStaffVoByCompany(@Param(value = "companyid") Integer companyid);
+	//List<StaffVo> queryManagerStaffVoByCompany(@Param(value = "companyid") Integer companyid);
 	
 }

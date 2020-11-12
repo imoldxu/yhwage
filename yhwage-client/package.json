@@ -4,6 +4,7 @@
   "license": "MIT",
   "description": "An admin dashboard application demo built upon Ant Design and UmiJS",
   "dependencies": {
+    "@ant-design/charts": "^1.0.6",
     "@ant-design/compatible": "^1.0.0",
     "@ant-design/icons": "^4.0.0",
     "@lingui/react": "^2.8.0",

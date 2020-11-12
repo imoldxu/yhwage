@@ -14,7 +14,6 @@ public class ModifyTaskBo {
 	@JSONField(format="yyyy-MM")
 	private String month;
 	
-	@PositiveOrZero
 	private Integer profit;
 	
 	@PositiveOrZero

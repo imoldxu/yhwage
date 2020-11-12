@@ -4,12 +4,13 @@ import { Table } from 'antd'
 import { DropOption } from 'components'
 import { Trans, withI18n } from '@lingui/react'
 import styles from './List.less'
+import { regFenToYuan } from '../../../utils/money'
 
 @withI18n()
 class List extends PureComponent {
 
     handleMenuClick = (record, e) => {
-        const { onDeleteItem, onEditItem, i18n } = this.props
+        const { onDeleteItem, onEditItem, onSetDepartmentRatio, i18n } = this.props
 
         if (e.key === '1') {
             onEditItem(record)
@@ -21,7 +22,9 @@ class List extends PureComponent {
                 onDeleteItem(record)
                 },
             })
-        } 
+        } else if (e.key === '3') {
+            onSetDepartmentRatio(record)
+        }
     }
 
     render() {
@@ -33,18 +36,84 @@ class List extends PureComponent {
                 title: '公司编号',
                 dataIndex: 'id',
                 key: 'id',
-                width: '20%',
+                width: '10%',
             },
             {
                 title: '公司名称',
                 dataIndex: 'name',
                 key: 'name',
-                width: '60%',
+                width: '10%',
+            },
+            {
+                title: '利润权重',
+                dataIndex: 'profitweight',
+                key: 'profitweight',
+                width: '10%',
+                render: (text, record) => {
+                    return (
+                        <span>{record.profitweight}%</span>
+                    )
+                }
+            },
+            {
+                title: '流量权重',
+                dataIndex: 'touristsweight',
+                key: 'touristsweight',
+                width: '10%',
+                render: (text, record) => {
+                    return (
+                        <span>{record.touristsweight}%</span>
+                    )
+                }
+            },
+            {
+                title: '好评权重',
+                dataIndex: 'scoreweight',
+                key: 'scoreweight',
+                width: '10%',
+                render: (text, record) => {
+                    return (
+                        <span>{record.scoreweight}%</span>
+                    )
+                }
+            },
+            {
+                title: '月毛利提成',
+                dataIndex: 'monthratio',
+                key: 'monthratio',
+                width: '10%',
+                render: (text, record) => {
+                    return (
+                        <span>{record.monthratio}%</span>
+                    )
+                }
+            },
+            {
+                title: '年纯利提成',
+                dataIndex: 'yearratio',
+                key: 'yearratio',
+                width: '10%',
+                render: (text, record) => {
+                    return (
+                        <span>{record.yearratio}%</span>
+                    )
+                }
+            },
+            {
+                title: '人头提成',
+                dataIndex: 'headerfee',
+                key: 'headerfee',
+                width: '10%',
+                render: (text, record) => {
+                    return (
+                        <span>{regFenToYuan(record.headerfee)}</span>
+                    )
+                }
             },
             {
                 title: '操作',
                 key: 'op',
-                width: '20%',
+                width: '10%',
                 fixed: 'right',
                 render: (text, record) => {
                     return (
@@ -53,7 +122,7 @@ class List extends PureComponent {
                             menuOptions={[
                                 { key: '1', name: i18n.t`Update` },
                                 // { key: '2', name: i18n.t`Delete` },
-                                //{ key: '3', name: '上传价格文件' },
+                                { key: '3', name: '设置部门提成' },
                             ]}
                         />
                     )

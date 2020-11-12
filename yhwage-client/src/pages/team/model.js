@@ -11,7 +11,7 @@ export default {
         modalVisible: false,
         selectTeam: {},
         list: [],
-        teamofcompany: {},
+        teamofdepartment: {},
     },
     subscriptions: {
         //监听路径的变化，跳转之后发起查询操作
@@ -55,7 +55,7 @@ export default {
             const { success, data } = yield call(queryTeam, payload)
             if (success) {
                 if (data.length==0){
-                    message.success("还没有团队", 2000, function(){})
+                    message.success("还没有团队", 5, function(){})
                 }
                 yield put({ type: 'querySuccess', payload: {list:data} })
             } else {
@@ -65,19 +65,19 @@ export default {
         *new({payload}, { call, put }) {
             const { success, data } = yield call(addTeam, payload)
             if(success){
-                const {companyid} = payload
+                const {departmentid} = payload
                 yield put({type:'closeModal'})
-                yield put({type:'query', payload:{companyid:companyid}})
+                yield put({type:'query', payload:{departmentid:departmentid}})
                 yield put({type:'queryAll', payload:{}})
                 message.success("添加成功")
             }
         },
-        *modify({payload}, { call, put }) {
+        *modify({payload}, { call, put, select }) {
             const { success, data } = yield call(modifyTeam, payload)
             if(success){
-                const {companyid} = payload
-                yield put({type:'closeModal'})
-                yield put({type:'query', payload:{companyid:companyid}})
+                yield put({type:'closeModal'});
+                const { filter } = yield select(_ =>_.team );
+                yield put({type:'query', payload: filter})
                 yield put({type:'queryAll', payload:{}})
                 message.success("修改成功")
             }
@@ -85,10 +85,7 @@ export default {
         *queryAll({payload}, { call, put }) {
             const { success, data } = yield call(queryAllTeam, payload)
             if (success) {
-                if (data.length==0){
-                    message.success("还没有的团队", 2000, function(){})
-                }
-                yield put({ type: 'querySuccess', payload: {teamofcompany:data} })
+                yield put({ type: 'querySuccess', payload: {teamofdepartment:data} })
             } else {
                 throw data
             }

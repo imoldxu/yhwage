@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.x.yh.context.ErrorCode;
 import com.x.yh.context.HandleException;
 import com.x.yh.context.bo.CalcWageBo;
+import com.x.yh.context.bo.DeleteWageBo;
 import com.x.yh.context.bo.WageQuery;
 import com.x.yh.entity.Wage;
 import com.x.yh.service.WageService;
@@ -45,15 +46,27 @@ public class WageController {
 	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
 	@RequestMapping(method = RequestMethod.GET)
 	@ApiOperation(value = "查询工资", notes = "查询工资")
-	public List<Wage> queryWage(@ApiParam(name="calcWageBo", value="查询工资请求") @Valid WageQuery wageQuery,
+	public List<Wage> queryWage(@ApiParam(name="wageQuery", value="查询工资请求") @Valid WageQuery wageQuery,
 			HttpServletRequest request, HttpServletResponse response) {
 		if(null!=wageQuery.getTeamid()) {
 			return calcWageService.queryTeamWage(wageQuery.getTeamid(), wageQuery.getMonth());
+		}else if(null!=wageQuery.getDepartmentid()) {
+			return calcWageService.queryDepartmentWage(wageQuery.getDepartmentid(), wageQuery.getMonth());	
 		}else if(null!=wageQuery.getCompanyid()) {
 			return calcWageService.queryCompanyWage(wageQuery.getCompanyid(), wageQuery.getMonth());	
 		}else {
 			throw new HandleException(ErrorCode.ARG_ERROR, "必须指定一个公司或一个团队");
 		}
+	}
+	
+	@RequiresRoles({"manager"})
+	@CrossOrigin(allowedHeaders = "*", allowCredentials = "true")
+	@RequestMapping(method = RequestMethod.DELETE)
+	@ApiOperation(value = "删除工资", notes = "删除工资")
+	public void deleteWage(@ApiParam(name="calcWageBo", value="查询工资请求") @Valid @RequestBody DeleteWageBo deleteWageBo,
+			HttpServletRequest request, HttpServletResponse response) {
+		calcWageService.deleteCompanyWage(deleteWageBo);	
+		return;
 	}
 	
 }

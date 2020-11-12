@@ -1,11 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
-import { FilterItem } from 'components'
 
 import { Trans } from '@lingui/react'
 import { Button, Row, Col, DatePicker, Form, Input, Cascader, Select } from 'antd'
-const { RangePicker } = DatePicker
 const { Option } = Select;
 
 const ColProps = {
@@ -16,6 +14,17 @@ const TwoColProps = {
 }
 
 class Filter extends Component {
+  constructor(props){
+    super(props)
+    const { filter={}, departofcompany } = props
+    if(filter.companyid){
+      this.state = { departments: departofcompany[filter.companyid]}
+    }else{
+      this.state = {departments:[]}
+    }
+  }
+
+
   formRef = React.createRef()
 
   handleFields = fields => {
@@ -53,9 +62,17 @@ class Filter extends Component {
     onFilterChange(fields)
   }
 
+  handleCompanyChange = (companyid) =>{
+    const { departofcompany } = this.props
+    const departments = departofcompany[companyid]
+    this.setState({ departments: departments, teams: []})
+  }
+
   render() {
     const { filter, onAdd, companys, i18n } = this.props
   
+    const departments = this.state.departments
+
     return (
       <Form
         ref={this.formRef}
@@ -68,7 +85,7 @@ class Filter extends Component {
         <Row gutter={16}>
           <Col {...ColProps} span= "6">
             <Form.Item label="公司" name='companyid'>
-              <Select>
+              <Select onChange={this.handleCompanyChange}>
                 {
                   companys.map(company=>{
                     return (
@@ -80,7 +97,21 @@ class Filter extends Component {
               </Select>
             </Form.Item>
           </Col>
-          <Col {...ColProps} span="18" >
+          <Col {...ColProps} span= "6">
+            <Form.Item label="部门" name='departmentid'>
+              <Select>
+                {
+                  departments.map(department=>{
+                    return (
+                    <Option value={department.id}>{department.name}</Option>
+                    )
+                  })
+                }
+
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col {...ColProps} span="12" >
             <Row justify="space-around">
               <Col flex={3}>
                 <Button
@@ -108,7 +139,7 @@ class Filter extends Component {
 
 }
 
-Filter.PropTypes = {
+Filter.propTypes = {
   filter: PropTypes.object,
   onFilterChange: PropTypes.func,
 }

@@ -12,6 +12,10 @@ public class StaffVo {
 	
 	private String companyName;
 	
+	private Integer departmentid;
+	
+	private String departmentName;
+	
 	private Integer teamid;
 	
 	private String teamName;
@@ -74,20 +78,20 @@ public class StaffVo {
 		this.cop = cop;
 	}
 
-//	public Integer getCopid() {
-//		return copid;
-//	}
-//
-//	public void setCopid(Integer copid) {
-//		this.copid = copid;
-//	}
-//
-//	public String getCopName() {
-//		return copName;
-//	}
-//
-//	public void setCopName(String copName) {
-//		this.copName = copName;
-//	}
+	public Integer getDepartmentid() {
+		return departmentid;
+	}
+
+	public void setDepartmentid(Integer departmentid) {
+		this.departmentid = departmentid;
+	}
+
+	public String getDepartmentName() {
+		return departmentName;
+	}
+
+	public void setDepartmentName(String departmentName) {
+		this.departmentName = departmentName;
+	}
 	
 }

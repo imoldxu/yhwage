@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { history, connect } from 'umi'
 import { Row, Col, Button, Popconfirm, Form, Input, Space, Card } from 'antd'
@@ -10,8 +10,8 @@ import Filter from './components/Filter'
 import StaffModal from './components/StaffModal'
 
 @withI18n()
-@connect(({ staff, company, team, cop, loading }) => ({ staff, company, team, cop, loading }))
-class Staff extends PureComponent {
+@connect(({ staff, company, department, team, cop, loading }) => ({ staff, company, department, team, cop, loading }))
+class Staff extends Component {
   //修改页面把过滤条件与页码等参数记录在路径上重新刷新
   // handleRefresh = newQuery => {
   //   const { location } = this.props
@@ -90,16 +90,18 @@ class Staff extends PureComponent {
   }
 
   get filterProps() {
-    const { dispatch, company, team, staff, location, i18n } = this.props
+    const { dispatch, company, department, team, staff, location, i18n } = this.props
     const { filter } = staff
     const { list=[] } = company
-    const { teamofcompany=[] } = team
+    const { departofcompany=[] } = department
+    const { teamofdepartment=[] } = team
 
     return {
       i18n,
       filter: filter,
       companys: list,
-      teamofcompany: teamofcompany,
+      departofcompany,
+      teamofdepartment,
       onFilterChange: values => {
         dispatch({
           type: 'staff/querySuccess',
@@ -117,10 +119,11 @@ class Staff extends PureComponent {
   }
 
   get modalProps(){
-    const { staff, dispatch, company, team, cop } = this.props 
+    const { staff, dispatch, company, department, team, cop } = this.props 
     const { modalVisible, selectStaff } = staff
     const { list=[] } = company
-    const { teamofcompany } = team
+    const { departofcompany } = department
+    const { teamofdepartment } = team
     const copList = cop.list? cop.list : [] 
 
     return {
@@ -129,7 +132,8 @@ class Staff extends PureComponent {
       handleCancel: this.closeModal,
       staff: selectStaff,
       companys: list,
-      teamofcompany: teamofcompany,
+      departofcompany,
+      teamofdepartment,
       cops: copList,
     }
   }
@@ -193,7 +197,7 @@ class Staff extends PureComponent {
   }
 }
 
-Staff.PropTypes = {
+Staff.propTypes = {
   staff: PropTypes.object,
   company: PropTypes.object,
   location: PropTypes.object,

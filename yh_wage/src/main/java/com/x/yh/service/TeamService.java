@@ -12,7 +12,7 @@ import com.x.commons.mybatis.PageResult;
 import com.x.yh.context.bo.AddTeamBo;
 import com.x.yh.context.bo.TeamQuery;
 import com.x.yh.context.vo.TeamVo;
-import com.x.yh.entity.Company;
+import com.x.yh.entity.Department;
 import com.x.yh.entity.Team;
 import com.x.yh.mapper.TeamMapper;
 
@@ -27,6 +27,8 @@ public class TeamService {
 	MapperFacade orikaMapper;
 	@Autowired
 	CompanyService companyService;
+	@Autowired
+	DepartmentService departmentService;
 	
 	
 	public PageResult<Team> getAll() {
@@ -49,25 +51,22 @@ public class TeamService {
 	public List<TeamVo> query(@Valid TeamQuery teamQuery) {
 		//Example example = new Example(Team.class);
 		List<TeamVo> list = null;
-		if (null != teamQuery.getCompanyid()) {
-		//	example.createCriteria().andEqualTo("companyid", teamQuery.getCompanyid());
-			list = teamMapper.queryTeamVoByCompany(teamQuery.getCompanyid());
-		}else {
-			list = teamMapper.queryTeamVo();
-		}
+		list = teamMapper.queryTeamVo(teamQuery.getCompanyid(), teamQuery.getDepartmentid());
 		return list;
 	}
 
-	public JSONObject queryAllByCompany() {
+	public JSONObject queryAllByDepartment() {
 		
-		List<Company> companys = companyService.getAll();
+		List<Department> departments = departmentService.getAll();
 
-		JSONObject ret = new JSONObject(companys.size());
-		companys.forEach(company->{
+		JSONObject ret = new JSONObject(departments.size());
+		departments.forEach(department->{
+			
 			TeamQuery teamQuery = new TeamQuery();
-			teamQuery.setCompanyid(company.getId());
-			List<TeamVo> teams = query(teamQuery);
-			ret.put(company.getId().toString(), teams);
+			teamQuery.setDepartmentid(department.getId());
+			List<TeamVo> teams = query(teamQuery);	
+			
+			ret.put(department.getId().toString(), teams);
 		});
 		
 		return ret;

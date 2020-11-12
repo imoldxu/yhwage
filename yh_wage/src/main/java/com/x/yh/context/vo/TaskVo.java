@@ -12,6 +12,10 @@ public class TaskVo {
 	
 	private String companyName;
 	
+	private Integer departmentid;
+	
+	private String departmentName;
+	
 	private String month;
 	
 	private Integer profit;
@@ -120,6 +124,22 @@ public class TaskVo {
 
 	public void setOthercost(Integer othercost) {
 		this.othercost = othercost;
+	}
+
+	public Integer getDepartmentid() {
+		return departmentid;
+	}
+
+	public void setDepartmentid(Integer departmentid) {
+		this.departmentid = departmentid;
+	}
+
+	public String getDepartmentName() {
+		return departmentName;
+	}
+
+	public void setDepartmentName(String departmentName) {
+		this.departmentName = departmentName;
 	}
 	
 }

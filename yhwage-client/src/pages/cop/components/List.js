@@ -60,19 +60,19 @@ class List extends PureComponent {
                 }
             },
             {
-                title: '月提成比例',
+                title: '月提成系数',
                 dataIndex: 'monthratio',
                 width: '15%',
                 render: (text, record) => {
-                    return (<span>{record.monthratio}%</span>)
+                    return (<span>{record.monthratio}</span>)
                 }
             },
             {
-                title: '年终提成比例',
+                title: '年终提成系数',
                 dataIndex: 'yearratio',
                 width: '15%',
                 render: (text, record) => {
-                    return (<span>{record.yearratio}%</span>)
+                    return (<span>{record.yearratio}</span>)
                 }
             },
             {
@@ -107,7 +107,7 @@ class List extends PureComponent {
 
 }
 
-List.PropTypes = {
+List.propTypes = {
     dataSource: PropTypes.array,
 }
 

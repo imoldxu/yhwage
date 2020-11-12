@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { history, connect } from 'umi'
 import { Row, Col, Button, Popconfirm, Form, Input, Space, Card } from 'antd'
@@ -11,7 +11,7 @@ import CopModal from './components/CopModal'
 
 @withI18n()
 @connect(({ cop, loading }) => ({ cop, loading }))
-class Cop extends PureComponent {
+class Cop extends Component {
   //修改页面把过滤条件与页码等参数记录在路径上重新刷新
   // handleRefresh = newQuery => {
   //   const { location } = this.props
@@ -174,7 +174,7 @@ class Cop extends PureComponent {
   }
 }
 
-Cop.PropTypes = {
+Cop.propTypes = {
   cop: PropTypes.object,
   location: PropTypes.object,
   dispatch: PropTypes.func,

@@ -14,11 +14,17 @@
 	</select-->
 	
 	<select id="sumYearAward" resultMap="yearAwardVo">
-		SELECT t_wage.staffid, t_wage.staffname, SUM(yearaward) as yearaward FROM t_wage WHERE t_wage.`month` like #{year,jdbcType=VARCHAR} group by t_wage.staffid
+		SELECT t_wage.staffid, t_wage.staffname, SUM(yearaward) as yearaward FROM t_wage 
+		WHERE t_wage.`month` like #{year,jdbcType=VARCHAR} 
+		<if test='staffname != null'>
+			and t_wage.staffname = #{staffname,jdbcType=VARCHAR} 
+		</if>
+		group by t_wage.staffid
 	</select>
 	
-	<select id="sumStaffYearAward" resultMap="yearAwardVo">
-		SELECT t_wage.staffid, t_wage.staffname, SUM(yearaward) as yearaward FROM t_wage WHERE t_wage.staffname = #{staffname,jdbcType=VARCHAR} AND t_wage.`month` like #{year,jdbcType=VARCHAR} group by t_wage.staffid
+	<select id="statisticStaff" resultType="com.x.yh.context.vo.StaffStatisticVo">
+		select staffid, staffname, ${year} as year, sum(t_wage.basicwage+t_wage.floatwage+t_wage.award+t_wage.yearaward) as totalcost, 
+		sum(profit) as totalprofit from t_wage where t_wage.`month` like '${year}%' GROUP BY staffid
 	</select>
 
 </mapper>

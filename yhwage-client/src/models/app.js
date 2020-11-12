@@ -49,7 +49,7 @@ export default {
         breadcrumbParentId: '1',
         name: 'yearaward',
         zh: {
-          name: '年终奖励'
+          name: '年提成'
         },
         route: '/yearaward',
       },
@@ -69,40 +69,46 @@ export default {
         zh: {
           name: '公司管理'
         },
-        //icon: 'code-o',
         route: '/company',
       },
       {
         id: '22',
+        name: 'department',
+        menuParentId: '2',
+        breadcrumbParentId: '2',
+        zh: {
+          name: '部门管理'
+        },
+        route: '/department',
+      },
+      {
+        id: '23',
         name: 'team',
         menuParentId: '2',
         breadcrumbParentId: '2',
         zh: {
           name: '团队管理'
         },
-        //icon: 'api',
         route: '/team',
       },
       {
-        id: '23',
+        id: '24',
         name: 'cop',
         menuParentId: '2',
         breadcrumbParentId: '2',
         zh: {
           name: '职级管理'
         },
-        //icon: 'camera-o',
         route: '/cop',
       },
       {
-        id: '24',
+        id: '25',
         name: 'staff',
         menuParentId: '2',
         breadcrumbParentId: '2',
         zh: {
           name: '员工管理'
         },
-        //icon: 'user',
         route: '/staff',
       },
       {
@@ -112,17 +118,45 @@ export default {
           name: '绩效管理'
         },
         icon: 'shopping-cart',
+      },
+      {
+        id: '31',
+        name: 'companytask',
+        menuParentId: '3',
+        breadcrumbParentId: '3',
+        zh: {
+          name: '公司绩效'
+        },
+        route: '/companytask',
+      },
+      {
+        id: '32',
+        name: 'staff',
+        menuParentId: '3',
+        breadcrumbParentId: '3',
+        zh: {
+          name: '团队绩效'
+        },
         route: '/task',
       },
       {
         id: '4',
-        name: 'config',
+        name: 'dashboard',
         zh: {
-          name: '配置管理'
+          name: '成本分析'
         },
-        icon: 'setting',
-        route: '/config',
+        icon: 'dashboard',
+        route: '/dashboard',
       },
+      // {
+      //   id: '4',
+      //   name: 'config',
+      //   zh: {
+      //     name: '配置管理'
+      //   },
+      //   icon: 'setting',
+      //   route: '/config',
+      // },
     ],
     locationPathname: '',
     locationQuery: {},
@@ -173,6 +207,7 @@ export default {
       // store isInit to prevent query trigger by refresh
       yield put({type:'company/query', payload:{}}) 
       yield put({type:'cop/query', payload:{}})
+      yield put({type:'department/queryAll', payload:{}})
       yield put({type:'team/queryAll', payload:{}})
 
       const isInit = store.get('isInit')

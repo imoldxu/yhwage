@@ -8,11 +8,11 @@ import { Button, Row, Col, DatePicker, Form, Input, Cascader, Select } from 'ant
 const { Option } = Select;
 
 const ColProps = {
-  span: 5
+  span: 4
 }
 
 const TwoColProps = {
-  span: 9
+  span: 8
 }
 
 const layout = {
@@ -26,7 +26,16 @@ const tailLayout = {
 class Filter extends Component {
   constructor(props){
     super(props)
-    this.state={teams:[]}
+    const { filter={}, departofcompany, teamofdepartment } = props
+    if(filter.companyid){
+      if(filter.departmentid){
+        this.state = { departments: departofcompany[filter.companyid], teams: teamofdepartment[filter.departmentid] }
+      }else{
+        this.state = { departments: departofcompany[filter.companyid], teams: [] }
+      }
+    }else{
+      this.state = {departments:[], teams:[]}
+    }
   }
 
 
@@ -49,6 +58,7 @@ class Filter extends Component {
 
   handleFields = fields => {
     if(fields.month){
+      console.log(fields.month)
       fields.month = moment(fields.month).format('YYYY-MM');
     }
     return fields
@@ -77,31 +87,43 @@ class Filter extends Component {
     this.handleSubmit(fields)
   }
 
-  handleChange = (key, values) => {
-    const { onFilterChange } = this.props
-    let fields = this.formRef.current.getFieldsValue()
-    fields[key] = values
-    fields = this.handleFields(fields)
-    onFilterChange(fields)
+  handleCompanyChange = (companyid) =>{
+    const { departofcompany } = this.props
+    const departments = departofcompany[companyid]
+    this.formRef.current.setFieldsValue({departmentid: null})
+    this.formRef.current.setFieldsValue({teamid: null})
+    this.setState({ departments: departments, teams: []})
   }
 
-  handleCompanyChange = (companyid) =>{
-    const { teamofcompany } = this.props
-    const teams = teamofcompany[companyid]
-    this.setState({teams: teams})
+  handleDepartmentChange = (departmentid) =>{
+    const { teamofdepartment } = this.props
+    if(departmentid){
+      const teams = teamofdepartment[departmentid]
+      this.setState({ teams: teams})
+    }else{
+      this.setState({ teams: []})
+    }
+    this.formRef.current.setFieldsValue({teamid: null})
   }
 
   render() {
-    const { filter, onCalc, companys, i18n } = this.props
+    const { filter={}, onCalc, onDelete, companys, i18n } = this.props
     
+    const { month } = filter
+    let monthDate
+    if(month){
+      monthDate = moment(month)
+    }
+
     const teams = this.state.teams
+    const departments = this.state.departments
 
     return (
       <Form
         {...layout}  
         ref={this.formRef}
         name="wageQuery"
-        initialValues={{...filter}}
+        initialValues={{...filter, month: monthDate}}
         onFinish={this.handleSubmit}
         onReset={this.handleReset}
       >
@@ -117,6 +139,23 @@ class Filter extends Component {
                    companys.map(company=>{
                       return(
                         <Option value={company.id}>{company.name}</Option>
+                      )
+                   }) 
+                }
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col
+            {...ColProps}
+          >
+            <Form.Item name="departmentid" label="部门">
+              <Select
+                onChange={this.handleDepartmentChange}
+                >
+                {
+                   departments.map(department=>{
+                      return(
+                        <Option value={department.id}>{department.name}</Option>
                       )
                    }) 
                 }
@@ -163,10 +202,16 @@ class Filter extends Component {
                   <Trans>Reset</Trans>
                 </Button>
               </Col>
-              <Col flex={3}>
+              <Col>
                 <Button
                   htmlType="button" onClick={()=>onCalc()}>
                   生成月薪
+                </Button>
+              </Col>
+              <Col>
+                <Button
+                  htmlType="button" onClick={()=>onDelete()}>
+                  删除
                 </Button>
               </Col>
             </Row>

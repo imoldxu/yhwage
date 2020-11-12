@@ -7,8 +7,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.x.yh.context.ErrorCode;
-import com.x.yh.context.HandleException;
 import com.x.yh.context.bo.AddStaffBo;
 import com.x.yh.context.bo.StaffQuery;
 import com.x.yh.context.vo.StaffVo;
@@ -53,23 +51,18 @@ public class StaffService {
 		List<StaffVo> list = null;
 		Integer teamid = staffQuery.getTeamid();
 		Integer companyid = staffQuery.getCompanyid();
-		if(teamid!=null) {
-			list = staffMapper.queryStaffVoByTeam(teamid);
-		}else if (companyid != null) {
-			list = staffMapper.queryStaffVoByCompany(companyid);
-		}else {
-			throw new HandleException(ErrorCode.ARG_ERROR, "必须指定公司或团队");
-		}
+		Integer departmentid = staffQuery.getDepartmentid();
+		list = staffMapper.queryStaffVo(companyid, departmentid, teamid);
 
 		return list;
 	}
 	
-	public List<StaffVo> queryManager(Integer companyid) {
-		List<StaffVo> list = null;
-		list = staffMapper.queryManagerStaffVoByCompany(companyid);
-		
-		return list;
-	}
+//	public List<StaffVo> queryManager(Integer companyid) {
+//		List<StaffVo> list = null;
+//		list = staffMapper.queryManagerStaffVoByCompany(companyid);
+//		
+//		return list;
+//	}
 
 	public void delete(Integer id) {
 		staffMapper.deleteByPrimaryKey(id);

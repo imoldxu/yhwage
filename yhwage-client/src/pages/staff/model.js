@@ -71,12 +71,12 @@ export default {
                 message.success("添加成功")
             }
         },
-        *modify({payload}, { call, put }) {
+        *modify({payload}, { call, put, select }) {
             const { success, data } = yield call(modifyStaff, payload)
             if(success){
-                const { companyid, teamid } = payload
+                const { filter } = yield select(_ =>_.staff );
                 yield put({type:'closeModal'})
-                yield put({type:'query', payload:{companyid, teamid}})
+                yield put({type:'query', payload:filter})
                 message.success("修改成功")
             }
         },

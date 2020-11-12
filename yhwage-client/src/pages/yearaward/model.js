@@ -31,7 +31,7 @@ export default {
     },
 
     effects: {
-        *calc({payload}, { call, put }) {
+        *calc({payload}, { call, put, select }) {
             const { success, data } = yield call(calcYearAward, payload)
             if (success) {
                 yield put({ type: 'querySuccess', payload: {list: data} })

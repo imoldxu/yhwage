@@ -22,11 +22,11 @@ public class Team {
 	@Column(name = "name")
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
 	private String name;
-	
-	@Column(name = "companyid")
-	@ColumnType(jdbcType = JdbcType.INTEGER)
-	private Integer companyid;
 
+	@Column(name = "departmentid")
+	@ColumnType(jdbcType = JdbcType.INTEGER)
+	private Integer departmentid;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -43,12 +43,12 @@ public class Team {
 		this.name = name;
 	}
 
-	public Integer getCompanyid() {
-		return companyid;
+	public Integer getDepartmentid() {
+		return departmentid;
 	}
 
-	public void setCompanyid(Integer companyid) {
-		this.companyid = companyid;
+	public void setDepartmentid(Integer departmentid) {
+		this.departmentid = departmentid;
 	}
 	
 }

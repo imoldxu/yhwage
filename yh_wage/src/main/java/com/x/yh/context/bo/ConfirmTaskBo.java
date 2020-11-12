@@ -1,15 +1,26 @@
 package com.x.yh.context.bo;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
+
 public class ConfirmTaskBo {
 
+	@NotNull
 	private Integer id;
 	
 	private Integer actualprofit;
 	
+	@PositiveOrZero
 	private Integer actualtourists;
 	
+	@PositiveOrZero
+	@Min(0)
+	@Max(5)
 	private Double actualscore;
 	
+	@PositiveOrZero
 	private Integer othercost;
 
 	public Integer getId() {

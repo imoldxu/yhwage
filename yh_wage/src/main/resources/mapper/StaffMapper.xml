@@ -9,6 +9,9 @@
 			jdbcType="INTEGER" />
 		<result column="companyname" property="companyName"
 			jdbcType="VARCHAR" />
+		<result column="departmentid" property="departmentid"
+			jdbcType="INTEGER" />
+		<result column="departmentname" property="departmentName" />
 		<result column="teamid" property="teamid" jdbcType="INTEGER" />
 		<result column="teamname" property="teamName"
 			jdbcType="VARCHAR" />
@@ -31,52 +34,56 @@
 
 	<select id="selectStaffVoById" resultMap="staffVo">
 		SELECT t_staff.*,
-		t_company.name as companyname, t_team.name as teamname,
-		t_class_of_position.id as copid, t_class_of_position.name as copname,
-		t_class_of_position.basicwage, t_class_of_position.floatwage,
-		t_class_of_position.monthratio, t_class_of_position.yearratio,
-		t_class_of_position.ismanager From t_staff LEFT JOIN t_company
-		on t_staff.companyid = t_company.id LEFT JOIN t_team on t_staff.teamid
-		= t_team.id LEFT JOIN t_class_of_position on t_staff.copid =
-		t_class_of_position.id where t_staff.id = #{id,jdbcType=INTEGER}
+		t_department.id as departmentid,
+		t_department.name as departmentname,
+		t_company.id as companyid,
+		t_company.name as companyname,
+		t_team.name	as teamname,
+		t_class_of_position.id as copid,
+		t_class_of_position.name as copname,
+		t_class_of_position.basicwage,
+		t_class_of_position.floatwage,
+		t_class_of_position.monthratio,
+		t_class_of_position.yearratio,
+		t_class_of_position.ismanager From t_staff 
+		LEFT JOIN t_team on t_staff.teamid = t_team.id 
+		LEFT JOIN t_department ON t_team.departmentid = t_department.id
+		LEFT JOIN t_company on t_department.companyid = t_company.id 
+		LEFT JOIN t_class_of_position on t_staff.copid = t_class_of_position.id 
+		where t_staff.id = #{id,jdbcType=INTEGER}
 	</select>
 
-	<select id="queryStaffVoByCompany" resultMap="staffVo">
+	<select id="queryStaffVo" resultMap="staffVo">
 		SELECT t_staff.*,
-		t_company.name as companyname, t_team.name as teamname,
-		t_class_of_position.id as copid, t_class_of_position.name as copname,
-		t_class_of_position.basicwage, t_class_of_position.floatwage,
-		t_class_of_position.monthratio, t_class_of_position.yearratio,
-		t_class_of_position.ismanager From t_staff LEFT JOIN t_company
-		on t_staff.companyid = t_company.id LEFT JOIN t_team on t_staff.teamid
-		= t_team.id LEFT JOIN t_class_of_position on t_staff.copid =
-		t_class_of_position.id where t_staff.companyid =
-		#{companyid,jdbcType=INTEGER}
-	</select>
+		t_department.id as departmentid,
+		t_department.name as departmentname,
+		t_company.id as companyid,
+		t_company.name as companyname,
+		t_team.name	as teamname,
+		t_class_of_position.id as copid,
+		t_class_of_position.name as copname,
+		t_class_of_position.basicwage,
+		t_class_of_position.floatwage,
+		t_class_of_position.monthratio,
+		t_class_of_position.yearratio,
+		t_class_of_position.ismanager From t_staff 
+		LEFT JOIN t_team on t_staff.teamid = t_team.id 
+		LEFT JOIN t_department ON t_team.departmentid = t_department.id
+		LEFT JOIN t_company on t_department.companyid = t_company.id 
+		LEFT JOIN t_class_of_position on t_staff.copid = t_class_of_position.id
+		<where>
+			<if test="teamid != null">
+				t_staff.teamid = #{teamid,jdbcType=INTEGER}
+			</if>
+			<if test="departmentid != null">
+				AND t_team.departmentid =
+				#{departmentid,jdbcType=INTEGER}
+			</if>
+			<if test="companyid != null">
+				AND t_department.companyid = #{companyid,jdbcType=INTEGER}
+			</if>
+		</where>
 
-	<select id="queryStaffVoByTeam" resultMap="staffVo">
-		SELECT t_staff.*,
-		t_company.name as companyname, t_team.name as teamname,
-		t_class_of_position.id as copid, t_class_of_position.name as copname,
-		t_class_of_position.basicwage, t_class_of_position.floatwage,
-		t_class_of_position.monthratio, t_class_of_position.yearratio,
-		t_class_of_position.ismanager From t_staff LEFT JOIN t_company on t_staff.companyid = t_company.id LEFT
-		JOIN t_team on t_staff.teamid = t_team.id LEFT JOIN
-		t_class_of_position on t_staff.copid = t_class_of_position.id where
-		t_staff.teamid = #{teamid,jdbcType=INTEGER}
-	</select>
-
-	<select id="queryManagerStaffVoByCompany" resultMap="staffVo">
-		SELECT t_staff.*,
-		t_company.name as companyname, t_team.name as teamname,
-		t_class_of_position.id as copid, t_class_of_position.name as copname,
-		t_class_of_position.basicwage, t_class_of_position.floatwage,
-		t_class_of_position.monthratio, t_class_of_position.yearratio,
-		t_class_of_position.ismanager From t_staff LEFT JOIN t_company
-		on t_staff.companyid = t_company.id LEFT JOIN t_team on t_staff.teamid
-		= t_team.id LEFT JOIN t_class_of_position on t_staff.copid =
-		t_class_of_position.id where t_staff.companyid =
-		#{companyid,jdbcType=INTEGER} AND t_class_of_position.ismanager=1
 	</select>
 
 </mapper>

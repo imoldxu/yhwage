@@ -36,4 +36,9 @@ public class CompanyService {
 		return cop;		
 	}
 	
+	public Company getCompanyById(Integer companyid) {
+		Company company = companyMapper.selectByPrimaryKey(companyid);
+		return company;
+	}
+	
 }

@@ -73,7 +73,7 @@ public class TeamController {
 	public JSONObject query(
 			HttpServletRequest request, HttpServletResponse response) {
 	
-		JSONObject teams = teamService.queryAllByCompany();
+		JSONObject teams = teamService.queryAllByDepartment();
 		
 		return teams;
 	}

@@ -8,6 +8,8 @@ public class WageQuery {
 
 	private Integer companyid;
 	
+	private Integer departmentid;
+	
 	private Integer teamid;
 	
 	@NotBlank
@@ -36,6 +38,14 @@ public class WageQuery {
 
 	public void setMonth(String month) {
 		this.month = month;
+	}
+
+	public Integer getDepartmentid() {
+		return departmentid;
+	}
+
+	public void setDepartmentid(Integer departmentid) {
+		this.departmentid = departmentid;
 	}
 	
 }

@@ -101,7 +101,7 @@ class Filter extends Component {
 
 }
 
-Filter.PropTypes = {
+Filter.propTypes = {
   onAdd: PropTypes.func,
   filter: PropTypes.object,
   onFilterChange: PropTypes.func,

@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { history, connect } from 'umi'
 import { Row, Col, Button, Popconfirm, Form, Input, Space, Card } from 'antd'
@@ -10,8 +10,8 @@ import Filter from './components/Filter'
 import TeamModal from './components/TeamModal'
 
 @withI18n()
-@connect(({ team, company, loading }) => ({ team, company, loading }))
-class Team extends PureComponent {
+@connect(({ team, company, department, loading }) => ({ team, company, department, loading }))
+class Team extends Component {
   //修改页面把过滤条件与页码等参数记录在路径上重新刷新
   // handleRefresh = newQuery => {
   //   const { location } = this.props
@@ -91,14 +91,16 @@ class Team extends PureComponent {
   }
 
   get filterProps() {
-    const { dispatch, team, company, i18n } = this.props
+    const { dispatch, team, department, company, i18n } = this.props
     const { filter } = team
     const { list=[] } = company
+    const { departofcompany } = department
 
     return {
       i18n,
       filter: filter,
       companys: list,
+      departofcompany,
       onFilterChange: values => {
         dispatch({
           type: 'team/querySuccess',
@@ -116,10 +118,10 @@ class Team extends PureComponent {
   }
 
   get modalProps(){
-    const { team, company } = this.props 
+    const { team, company, department } = this.props 
     const { modalVisible, selectTeam } = team
     const { list=[] } = company
-
+    const { departofcompany } = department
 
     return {
       visible: modalVisible,
@@ -127,6 +129,7 @@ class Team extends PureComponent {
       handleCancel: this.closeModal,
       team: selectTeam,
       companys: list,
+      departofcompany,
     }
   }
 
@@ -168,22 +171,35 @@ class Team extends PureComponent {
 
   }
 
+  createTeamModal = () =>{
+    const { team } = this.props;
+    const { modalVisible } = team
+    if(modalVisible){
+      return (<TeamModal {...this.modalProps}></TeamModal>)
+    } else{ 
+      return (<></>) 
+    } 
+  }
+
   render() {
 
     const { team } = this.props;
+    const { modalVisible } = team
     const { list = [] } = team;
 
     return (
       <Page inner>
         <Filter {...this.filterProps}></Filter>
         <List {...this.listProps}></List>
-        <TeamModal {...this.modalProps}></TeamModal>        
+        {
+          this.createTeamModal()
+        }    
       </Page>
     )
   }
 }
 
-Team.PropTypes = {
+Team.propTypes = {
   team: PropTypes.object,
   company: PropTypes.object,
   location: PropTypes.object,

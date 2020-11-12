@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { history, connect } from 'umi'
 import { Row, Col, Button, Popconfirm, Form, Input, Space } from 'antd'
@@ -10,7 +10,7 @@ import Filter from './components/Filter'
 
 @withI18n()
 @connect(({ yearaward, loading }) => ({ yearaward, loading }))
-class YearAward extends PureComponent {
+class YearAward extends Component {
   //修改页面把过滤条件与页码等参数记录在路径上重新刷新
   // handleRefresh = newQuery => {
   //   const { location } = this.props
@@ -63,7 +63,7 @@ class YearAward extends PureComponent {
 
   get filterProps() {
     const { yearaward, i18n, dispatch } = this.props
-    const { filter } = yearaward
+    const { filter={} } = yearaward
 
     return {
       i18n,
@@ -85,7 +85,7 @@ class YearAward extends PureComponent {
   }
 }
 
-YearAward.PropTypes = {
+YearAward.propTypes = {
   yearaward: PropTypes.object,
   location: PropTypes.object,
   dispatch: PropTypes.func,

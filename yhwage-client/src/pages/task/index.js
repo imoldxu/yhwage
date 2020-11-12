@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { history, connect } from 'umi'
 import { Row, Col, Button, Popconfirm, Form, Input, Space, Card } from 'antd'
@@ -11,8 +11,8 @@ import TaskModal from './components/TaskModal'
 import ConfirmModal from './components/ConfirmModal'
 
 @withI18n()
-@connect(({ task, company, team, loading }) => ({ task, company, team, loading }))
-class Task extends PureComponent {
+@connect(({ task, department, company, team, loading }) => ({ task, department, company, team, loading }))
+class Task extends Component {
   //修改页面把过滤条件与页码等参数记录在路径上重新刷新
   // handleRefresh = newQuery => {
   //   const { location } = this.props
@@ -94,16 +94,18 @@ class Task extends PureComponent {
   }
 
   get filterProps() {
-    const { dispatch, task, company, team, i18n } = this.props
+    const { dispatch, task, department, company, team, i18n } = this.props
     const { filter } = task
     const { list=[] } = company
-    const { teamofcompany } = team
+    const { departofcompany } = department
+    const { teamofdepartment } = team
 
     return {
       i18n,
       filter: filter,
       companys: list,
-      teamofcompany: teamofcompany,
+      departofcompany,
+      teamofdepartment,
       onFilterChange: values => {
         dispatch({
           type: 'task/querySuccess',
@@ -216,6 +218,20 @@ class Task extends PureComponent {
 
   }
 
+  showTaskModal = () =>{
+    const { task } = this.props 
+    const { modalVisible, selectTask } = task
+
+    return modalVisible? (<TaskModal {...this.modalProps}></TaskModal>):(<></>)
+  }
+
+  showConfirmModal = () =>{
+    const { task } = this.props 
+    const { confirmModalVisible, selectTask } = task
+
+    return confirmModalVisible? (<ConfirmModal {...this.confirmModalProps}></ConfirmModal>):(<></>)
+  }
+
   render() {
 
     const { task } = this.props;
@@ -225,14 +241,18 @@ class Task extends PureComponent {
       <Page inner>
         <Filter {...this.filterProps}></Filter>
         <List {...this.listProps}></List>
-        <TaskModal {...this.modalProps}></TaskModal>
-        <ConfirmModal {...this.confirmModalProps}></ConfirmModal>
+        {
+          this.showTaskModal()
+        }
+        {
+          this.showConfirmModal()
+        }
       </Page>
     )
   }
 }
 
-Task.PropTypes = {
+Task.propTypes = {
   PriceList: PropTypes.object,
   location: PropTypes.object,
   dispatch: PropTypes.func,

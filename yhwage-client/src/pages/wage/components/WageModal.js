@@ -44,11 +44,11 @@ class WageModal extends Component{
 
     render(){
 
-        const { companys, visible, handleCancel} = this.props;
+        const { companys, visible, handleCancel, title} = this.props;
 
         return(
             <Modal
-                title="计算月薪"
+                title={title}
                 visible={visible}
                 onOk={this.onOk}
                 confirmLoading={false}
@@ -59,7 +59,6 @@ class WageModal extends Component{
                     {...layout}
                     ref={this.formRef}
                     name="calc"
-                    initialValues={{}}
                     preserve={false}
                 >
                     
@@ -90,7 +89,7 @@ class WageModal extends Component{
 
 }
 
-WageModal.PropTypes={
+WageModal.propTypes={
     handleOk: PropTypes.func,
     handleCancel: PropTypes.func,
     companys: PropTypes.array,

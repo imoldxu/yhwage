@@ -39,6 +39,12 @@ class List extends PureComponent {
                 width: '10%',
             },
             {
+                title: '部门',
+                dataIndex: 'departmentName',
+                key: 'departmentName',
+                width: '10%',
+            },
+            {
                 title: '团队',
                 dataIndex: 'teamName',
                 key: 'teamName',
@@ -110,7 +116,7 @@ class List extends PureComponent {
                         <DropOption
                             onMenuClick={e => this.handleMenuClick(record, e)}
                             menuOptions={[
-                                { key: '1', name: i18n.t`Update` },
+                                //{ key: '1', name: i18n.t`Update` },
                                 { key: '3', name: "确认绩效" },
                             ]}
                         />

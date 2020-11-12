@@ -67,13 +67,17 @@ class Filter extends Component {
 
   render() {
     const { filter, i18n } = this.props
-
+    const { name, year } = filter
+    let yearDate
+    if(year){
+      yearDate = moment(year)
+    }
     return (
       <Form
         {...layout}  
         ref={this.formRef}
         name="yearAwardQuery"
-        initialValues={{...filter}}
+        initialValues={{name: name, year: yearDate}}
         onFinish={this.handleSubmit}
         onReset={this.handleReset}
       >

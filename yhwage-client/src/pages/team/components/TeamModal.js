@@ -19,7 +19,17 @@ const layout ={
 
 
 class TeamModal extends Component{
-    
+    constructor(props){
+        super(props)
+        const { team={}, departofcompany } = props
+        if(team.companyid){
+            this.state = { departments: departofcompany[team.companyid]}
+        }else{
+            this.state = {departments:[]}
+        }
+    }
+
+
     formRef = React.createRef()
 
     onOk = () =>{
@@ -37,14 +47,20 @@ class TeamModal extends Component{
         .catch(info => {
             console.log('校验失败:', info);
         });
+    }
 
-        
+    handleCompanyChange = (companyid) =>{
+        const { departofcompany } = this.props
+        const departments = departofcompany[companyid]
+        this.setState({ departments: departments, teams: []})
     }
 
     render(){
 
         const { team, companys, visible, handleCancel} = this.props;
         const { id } = team;
+
+        const departments = this.state.departments
 
         const title = id ? "修改团队":"新建团队"
 
@@ -81,7 +97,7 @@ class TeamModal extends Component{
                     rules={[{required:true}]}
                     hasFeedback
                     >
-                        <Select>
+                        <Select onChange={this.handleCompanyChange}>
                             {companys.map(company=>{
                                 return (
                                 <Option value={company.id}>{company.name}</Option>
@@ -89,6 +105,20 @@ class TeamModal extends Component{
                             })}
                         </Select>
                     </Form.Item>
+                    <Form.Item name="departmentid"
+                    label="所属部门"
+                    rules={[{required:true}]}
+                    hasFeedback
+                    >
+                        <Select>
+                            {departments.map(department=>{
+                                return (
+                                <Option value={department.id}>{department.name}</Option>
+                                )
+                            })}
+                        </Select>
+                    </Form.Item>
+                    
                 </Form>
             </Modal>
         )
@@ -96,7 +126,7 @@ class TeamModal extends Component{
 
 }
 
-TeamModal.PropTypes={
+TeamModal.propTypes={
     handleOk: PropTypes.func,
     handleCancel: PropTypes.func,
     team: PropTypes.object,

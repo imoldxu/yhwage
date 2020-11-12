@@ -86,23 +86,23 @@ export default {
                 message.success("添加成功")
             }
         },
-        *modify({payload}, { call, put }) {
+        *modify({payload}, { call, put, select }) {
             const { success, data } = yield call(modifyTask, payload)
             if(success){
-                const {teamid, month} = payload
+                const { filter } = yield select(_ =>_.task );
                 yield put({type:'closeModal'})
-                yield put({type:'query', payload:{teamid:teamid, month:month}})
+                yield put({type:'query', payload: filter})
                 message.success("修改成功")
             }
         },
-        *confirm({payload},{ call, put }) {
-            const {teamid, month} = payload
+        *confirm({payload},{ call, put, select }) {
             delete payload.teamid
             delete payload.month
             const { success, data } = yield call(confirmTask, payload)
             if(success){
+                const { filter } = yield select(_ =>_.task );
                 yield put({type:'closeConfirmModal'})
-                yield put({type:'query', payload:{teamid, month}})
+                yield put({type:'query', payload: filter})
                 message.success("完成成功")
             }
         }

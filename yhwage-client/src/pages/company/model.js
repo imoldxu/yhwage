@@ -3,12 +3,13 @@ import api from 'api'
 import { history } from 'umi'
 const { pathToRegexp } = require("path-to-regexp")
 
-const { addCompany, modifyCompany, queryCompany } = api
+const { addCompany, modifyCompany, queryCompany, setDepartmentRatio } = api
 
 export default {
     namespace: "company",
     state:{
         modalVisible: false,
+        ratioModalVisible: false,
         selectCompany: {}
     },
     subscriptions: {
@@ -53,6 +54,19 @@ export default {
                 ...state,
                 modalVisible: false,
             }
+        },
+        showRatioModal(state, {payload}) {
+            return {
+                ...state,
+                ratioModalVisible: true,
+                ...payload,
+            }
+        },
+        closeRatioModal(state, {payload}){
+            return {
+                ...state,
+                ratioModalVisible: false,
+            }
         }
     },
 
@@ -79,6 +93,14 @@ export default {
                 yield put({type:'closeModal'})
                 yield put({type:'query', payload:{}})
                 message.success("修改成功")
+            }
+        },
+        *setRatio({payload}, { call, put}){
+            const { success, data } = yield call(setDepartmentRatio, payload)
+            if(success){
+                yield put({type:'closeRatioModal'})
+                yield put({type:'department/queryAll', payload:{}})
+                message.success('设置成功')
             }
         },
     }

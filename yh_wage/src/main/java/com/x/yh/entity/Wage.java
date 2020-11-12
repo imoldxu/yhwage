@@ -45,6 +45,13 @@ public class Wage {
 	@ColumnType(jdbcType = JdbcType.VARCHAR)
 	private String teamName;
 	
+	@Column(name = "departmentid")
+	@ColumnType(jdbcType = JdbcType.INTEGER)
+	private Integer departmentid;
+	
+	@Column(name = "departmentname")
+	@ColumnType(jdbcType = JdbcType.VARCHAR)
+	private String departmentName;
 	
 	@EmbeddedId
 	@Column(name = "month")
@@ -66,6 +73,10 @@ public class Wage {
 	@Column(name = "yearaward")
 	@ColumnType(jdbcType = JdbcType.INTEGER)
 	private Integer yearaward;
+	
+	@Column(name = "profit")
+	@ColumnType(jdbcType = JdbcType.INTEGER)
+	private Integer profit;
 	
 	@Transient
 	private Double yearRatio;
@@ -180,6 +191,30 @@ public class Wage {
 
 	public void setTeamName(String teamName) {
 		this.teamName = teamName;
+	}
+
+	public Integer getDepartmentid() {
+		return departmentid;
+	}
+
+	public void setDepartmentid(Integer departmentid) {
+		this.departmentid = departmentid;
+	}
+
+	public String getDepartmentName() {
+		return departmentName;
+	}
+
+	public void setDepartmentName(String departmentName) {
+		this.departmentName = departmentName;
+	}
+
+	public Integer getProfit() {
+		return profit;
+	}
+
+	public void setProfit(Integer profit) {
+		this.profit = profit;
 	}
 	
 }
