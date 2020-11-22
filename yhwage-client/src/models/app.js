@@ -49,7 +49,7 @@ export default {
         breadcrumbParentId: '1',
         name: 'yearaward',
         zh: {
-          name: '年提成'
+          name: '待发放提成'
         },
         route: '/yearaward',
       },

@@ -26,7 +26,7 @@ class List extends PureComponent {
                 width: '10%',
             },
             {
-                title: '年终',
+                title: '年提成',
                 dataIndex: 'yearaward',
                 key: 'yearaward',
                 width: '10%',

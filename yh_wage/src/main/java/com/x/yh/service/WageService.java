@@ -212,7 +212,11 @@ public class WageService {
 			wage.setYearaward((int) Math.round(yearTotalAward*actualRatio));
 		}
 		if(!ret.isEmpty()) {
-			wageMapper.insertList(ret);
+			try {
+				wageMapper.insertList(ret);
+			}catch (Exception e) {
+				throw new HandleException(ErrorCode.NORMAL_ERROR, "生成月薪失败，请勿重复生成");
+			}
 		}
 		//teamWage.setTotalCost(monthcost);
 		teamWage.setProfit(task.getActualprofit());

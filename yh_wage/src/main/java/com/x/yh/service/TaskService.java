@@ -118,11 +118,13 @@ public class TaskService {
 					add(task);
 				}
 			}
-			if(totalProfit!=companyTask.getProfit().intValue()) {
-				throw new HandleException(ErrorCode.ARG_ERROR, "部门中团队利润必须与公司利润匹配");
-			}
-			if(totalTourists!=companyTask.getTourists().intValue()) {
-				throw new HandleException(ErrorCode.ARG_ERROR, "部门中团队流量必须与公司流量匹配");
+			if(teamTasks.size()!=0) {//部门之下没有团队则不检查
+				if(totalProfit!=companyTask.getProfit().intValue()) {
+					throw new HandleException(ErrorCode.ARG_ERROR, "部门中团队利润必须与公司利润匹配");
+				}
+				if(totalTourists!=companyTask.getTourists().intValue()) {
+					throw new HandleException(ErrorCode.ARG_ERROR, "部门中团队流量必须与公司流量匹配");
+				}
 			}
 		}
 	}
